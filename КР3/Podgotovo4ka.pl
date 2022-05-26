@@ -263,3 +263,54 @@ lf([H|_],I,H,I):-!.
 lf([_|T],I,H,In):-
     I1 is I + 1,
     lf(T,I1,H,In).
+
+%Вариант 2*
+
+%1
+fib(1,1):-!.
+fib(2,1):-!.
+fib(N,A):- N1 is N - 1, N2 is N - 2, fib(N1, X1), fib(N2, X2), A is X1 + X2.
+
+fib_d(_,B,N,N,X):-!, X is B.
+fib_d(A1,A2,N1,N,X):- B is A1 + A2, N2 is N1 + 1, fib_d(A2,B,N2,N,X).
+fib_d(N,X):- fib_d(1,1,2,N,X).
+
+%2
+listFib([],0):-!.
+listFib([[N,X]|T],C):-fib(N,X), !,
+    listFib(T,C1),C is C1 + 1.
+listFib([_|T],C):-listFib(T,C).
+
+%3
+
+inListEx1([H|T],H,T).
+inListEx1([H|T],El,[H|TT]):-inListEx1(T,El,TT).
+
+razm(List,K,Razm):-b_a_r_NR(List,[],K,Razm).
+
+b_a_r_NR(_,Per,0,Per):-!.
+b_a_r_NR(List,Per,K,Razm):- inListEx1(List,El,A),K1 is K - 1, b_a_r_NR(A,[El|Per],K1,Razm).
+
+razmWR(List,K,Razm):-barWR(List,[],K,Razm).
+
+barWR(_,Per,0,Per):-!.
+barWR(List,Per,K,Razm):- inListEx1(List,El,_), K1 is K - 1, barWR(List,[El|Per],K1,Razm).
+
+%4 в падлу описание задачи так себе
+
+%5
+inList2(List,Id,El):-ili1(List,1,Id,El).
+
+ili1([H|_],I,I,H).
+ili1([_|T],I,Id,El):-
+    I1 is I + 1,
+    ili(T,I1,Id,El).
+
+fff:-
+    List=[_,_,_,_,_,_],
+    razm([a,b,c,d,e],3,[R1,R2,R3]),
+    inList2(List,1,R1),inList2(List,2,R2),inList2(List,3,R3),
+    razmWR([v,w,x,z,y],3,[R11,R22,R33]),
+    inList2(List,4,R11),inList2(List,5,R22),inList2(List,6,R33),
+    write(List),nl,fail.
+
